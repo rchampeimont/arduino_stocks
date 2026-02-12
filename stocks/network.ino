@@ -2,32 +2,24 @@
 #include <WiFiS3.h>
 #include "secrets.h"
 
-WiFiClient client;
-
-void stop() {
-  digitalWrite(LED_BUILTIN, HIGH);
-  while (true);
-}
-
 void initWifi() {
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
-    printStatusMessageOnLCD("WiFi hard fail");
-    stop();
+    fatalError("WiFi hard fail");
   }
 
   String fv = WiFi.firmwareVersion();
   if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
-    printStatusMessageOnLCD("Upgrade firmware");
-    stop();
+    fatalError("Upgrade firmware");
   }
-
-  //WiFi.lowPowerMode();
 
   printStatusMessageOnLCD("%s...", WIFI_NAME);
   if (WiFi.begin(WIFI_NAME, WIFI_PASSWORD) != WL_CONNECTED) {
-    printStatusMessageOnLCD("FAIL %s", WIFI_NAME);
-    stop();
+    fatalError("Connfail %s", WIFI_NAME);
+  }
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
   }
 
   printStatusMessageOnLCD("Wifi OK");
