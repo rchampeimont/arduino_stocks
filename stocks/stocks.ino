@@ -4,6 +4,7 @@
 
 void setup() {
   Serial.begin(9600); // for debug
+  Serial.println("Restarted.");
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
   initMatrix();

@@ -13,9 +13,9 @@ void initWifi() {
     fatalError("Upgrade firmware");
   }
 
-  printStatusMessageOnLCD("%s...", WIFI_NAME);
+  printStatusMessageOnLCD(WIFI_NAME "...");
   if (WiFi.begin(WIFI_NAME, WIFI_PASSWORD) != WL_CONNECTED) {
-    fatalError("Connfail %s", WIFI_NAME);
+    fatalError("Connfail " WIFI_NAME);
   }
 
   while (WiFi.status() != WL_CONNECTED) {

@@ -9,36 +9,40 @@ const char* host = "www.alphavantage.co";
 void getDataForSymbol(const char* symbol) {
   String line;
 
-  printStatusMessageOnLCD("Getting %s", symbol);
+  printStatusMessageOnLCD(String("Getting ") + symbol);
 
   String path = String("/query?function=GLOBAL_QUOTE&symbol=") + symbol + "&apikey=" + ALPHAVANTAGE_API_KEY + "&datatype=csv";
 
-  client.print(String("GET ") + path + " HTTP/1.1\r\n" +
-               "Host: " + host + "\r\n" +
-               "Connection: close\r\n\r\n");
+  String request = String("GET ") + path + " HTTP/1.1\r\n" +
+                  "Host: " + host + "\r\n" +
+                  "Connection: close\r\n\r\n";
+
+  Serial.println(request); // for debug
+  client.print(request); // Send HTTP request
 
   // Skip HTTP headers
   while (client.connected()) {
     line = client.readStringUntil('\n');
+    Serial.println(line);
     if (line == "\r") break;
   }
 
   int lineIndex = 0;
   while (client.connected()) {
     line = client.readStringUntil('\n');
-    Serial.print(line);
+    Serial.println(line);
     lineIndex++;
     if (lineIndex == 2) break;
   }
 
   if (lineIndex < 2) {
-    fatalError("Miss line for %s", symbol);
+    fatalError(String("Miss line for ") + symbol);
   }
 
   double open, high, low, price;
   sscanf(line.c_str(), "%s,%f,%f,%f,%f", &open, &high, &low, &price);
 
-  printStatusMessageOnLCD("%s: %f", symbol, price);
+  printStatusMessageOnLCD(String(symbol) + " " + price);
 }
 
 void connectToAPI() {

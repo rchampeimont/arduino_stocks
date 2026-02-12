@@ -21,17 +21,10 @@ void initLCD() {
   lcd.clear();
 }
 
-void printStatusMessageOnLCD(const char *format, ...) {
-  char buf[MAX_STATUS_MESSAGE_LENGTH + 1];
-  va_list args;
-  va_start(args, format);
-  vsnprintf(buf, MAX_STATUS_MESSAGE_LENGTH + 1, format, args);
-
+void printStatusMessageOnLCD(String s) {
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print(buf);
-
-  va_end(args);
+  lcd.print(s);
 }
 
 void printFatalError() {

@@ -3,13 +3,8 @@ void stop() {
   while (true);
 }
 
-void fatalError(const char *format, ...) {
-  va_list args;
-  va_start(args, format);
-
-  printStatusMessageOnLCD(format, args);
+void fatalError(String s) {
+  printStatusMessageOnLCD(s);
   printFatalError();
   stop();
-
-  va_end(args);
 }
