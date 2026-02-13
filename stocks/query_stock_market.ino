@@ -1,15 +1,15 @@
 #include <WiFiSSLClient.h>
 
-#define API_RETRIES 5
+#define API_RETRIES 30
 
 WiFiSSLClient client;
 
 const char* host = "www.alphavantage.co";
 
-void getDataForSymbol(const char* symbol) {
+int getDataForSymbol(const char* symbol) {
   String line;
 
-  printStatusMessageOnLCD(String("Getting ") + symbol);
+  printStatusMessageOnLCD(String("Getting symbol ") + symbol);
 
   String path = String("/query?function=GLOBAL_QUOTE&symbol=") + symbol + "&apikey=" + ALPHAVANTAGE_API_KEY + "&datatype=csv";
 
@@ -29,37 +29,46 @@ void getDataForSymbol(const char* symbol) {
 
   int lineIndex = 0;
   while (client.connected()) {
-    line = client.readStringUntil('\n');
+    line = client.readStringUntil(lineIndex == 1 ? '%' : '\n');
     Serial.println(line);
     lineIndex++;
     if (lineIndex == 2) break;
   }
 
   if (lineIndex < 2) {
-    fatalError(String("Miss line for ") + symbol);
+    printStatusMessageOnLCD(String("Miss line for ") + symbol);
+    return 0; // fail
+  }
+
+  if (line.indexOf("rate limit") != -1) {
+    printStatusMessageOnLCD("API rate limit error");
+    return 0; // fail
   }
 
   double open, high, low, price;
   sscanf(line.c_str(), "%s,%f,%f,%f,%f", &open, &high, &low, &price);
 
   printStatusMessageOnLCD(String(symbol) + " " + price);
+  return 1; // success
 }
 
-void connectToAPI() {
+int connectToAPI() {
   for (int i=0; i<API_RETRIES; i++) {
     printStatusMessageOnLCD("Conn to API...");
     if (client.connect(host, 443)) {
       printStatusMessageOnLCD("Connected to API");
-      return;
+      return 1; // success
     } else {
       printStatusMessageOnLCD("Will retry API");
-      delay(5000);
+      delay(1000);
     }
   }
-  fatalError("API fail gave up");
+  printStatusMessageOnLCD("API fail gave up");
+  return 0; // fail
 }
 
-void updateStockMarketData() {
-  connectToAPI();
-  getDataForSymbol("COST");
+int updateStockMarketData() {
+  if (! connectToAPI()) return 0;
+  if (! getDataForSymbol("COST")) return 0;
+  return 1; // success
 }

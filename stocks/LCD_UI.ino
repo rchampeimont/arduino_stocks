@@ -18,6 +18,7 @@ LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_DATA_PIN_D4, LCD_DATA_PIN_D5, 
 
 void initLCD() {
   lcd.begin(LCD_COLS, LCD_ROWS);
+  lcd.noAutoscroll();
   lcd.clear();
 }
 
@@ -27,7 +28,16 @@ void printStatusMessageOnLCD(String s) {
   lcd.print(s);
 }
 
-void printFatalError() {
-  lcd.setCursor(0, LCD_ROWS - 1);
-  lcd.print("Execution halted.");
+void clearRowLCD(int row) {
+  lcd.setCursor(0, row);
+  for (int i=0; i<LCD_COLS; i++) {
+    lcd.print(" ");
+  }
+}
+
+void announceRetryLCD(int seconds) {
+  const int rowIndex = LCD_ROWS - 1;
+  clearRowLCD(rowIndex);
+  lcd.setCursor(0, rowIndex);
+  lcd.print(String("Will retry in ") + seconds + String(" s"));
 }
