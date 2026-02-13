@@ -35,18 +35,34 @@ int getDataForSymbol(const char* symbol) {
     if (lineIndex == 2) break;
   }
 
-  if (lineIndex < 2) {
-    printStatusMessageOnLCD(String("Miss line for ") + symbol);
-    return 0; // fail
-  }
-
   if (line.indexOf("rate limit") != -1) {
     printStatusMessageOnLCD("API rate limit error");
     return 0; // fail
   }
 
-  double open, high, low, price;
-  sscanf(line.c_str(), "%s,%f,%f,%f,%f", &open, &high, &low, &price);
+  // Gather last line
+  if (lineIndex < 2) {
+    line = "";
+    while (client.connected() || client.available()) {
+      if (client.available()) {
+        char c = client.read();
+        line += c;
+      }
+    }
+    Serial.println(line);
+  }
+
+  Serial.println(String("Will parse line: ") + line);
+
+  // Point pointer to first char of price value
+  const char* p = line.c_str();
+  int commaCount = 0;
+  while (*p && commaCount < 4) {
+    if (*p == ',') commaCount++;
+    p++;
+  }
+
+  float price = atof(p);
 
   printStatusMessageOnLCD(String(symbol) + " " + price);
   return 1; // success
@@ -68,7 +84,9 @@ int connectToAPI() {
 }
 
 int updateStockMarketData() {
-  if (! connectToAPI()) return 0;
-  if (! getDataForSymbol("COST")) return 0;
+  for (int i=0; i<stockCount; i++) {
+    if (! connectToAPI()) return 0;
+    if (! getDataForSymbol(myStocks[i])) return 0;
+  }
   return 1; // success
 }
