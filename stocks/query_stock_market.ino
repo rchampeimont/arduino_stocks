@@ -6,10 +6,12 @@ WiFiSSLClient client;
 
 const char* host = "www.alphavantage.co";
 
-int getDataForSymbol(const char* symbol) {
+int getDataForSymbol(struct stock* currentStock) {
+  const char* symbol = currentStock->symbol;
   String line;
 
-  printStatusMessageOnLCD(String("Getting symbol ") + symbol);
+  printStatusMessageOnLCD(String("Getting ") + symbol);
+  Serial.println(String("Getting ") + symbol);
 
   String path = String("/query?function=GLOBAL_QUOTE&symbol=") + symbol + "&apikey=" + ALPHAVANTAGE_API_KEY + "&datatype=csv";
 
@@ -17,20 +19,20 @@ int getDataForSymbol(const char* symbol) {
                   "Host: " + host + "\r\n" +
                   "Connection: close\r\n\r\n";
 
-  Serial.println(request); // for debug
+  //Serial.println(request); // for debug
   client.print(request); // Send HTTP request
 
   // Skip HTTP headers
   while (client.connected()) {
     line = client.readStringUntil('\n');
-    Serial.println(line);
+    //Serial.println(line);
     if (line == "\r") break;
   }
 
   int lineIndex = 0;
   while (client.connected()) {
     line = client.readStringUntil(lineIndex == 1 ? '%' : '\n');
-    Serial.println(line);
+    //Serial.println(line);
     lineIndex++;
     if (lineIndex == 2) break;
   }
@@ -49,12 +51,11 @@ int getDataForSymbol(const char* symbol) {
         line += c;
       }
     }
-    Serial.println(line);
   }
 
   Serial.println(String("Will parse line: ") + line);
 
-  // Point pointer to first char of price value
+  // Point pointer to first char of the price value
   const char* p = line.c_str();
   int commaCount = 0;
   while (*p && commaCount < 4) {
@@ -62,9 +63,23 @@ int getDataForSymbol(const char* symbol) {
     p++;
   }
 
-  float price = atof(p);
+  double price = atof(p);
 
-  printStatusMessageOnLCD(String(symbol) + " " + price);
+  if (price != 0) {
+    currentStock->currentPrice = price;
+    replaceRowLCD(1, String(symbol) + " " + price);
+    replaceRowLCD(2, String("Book cost: ") + currentStock->bookCost);
+
+    const char prefix[] = "Gain: ";
+    char pct[LCD_COLS - sizeof(prefix) + 1];
+    snprintf(pct, sizeof(pct), "%+.1f %%", (100.0f * (currentStock->currentPrice - currentStock->bookCost)) / currentStock->bookCost);
+
+    replaceRowLCD(3, String(prefix) + pct);
+  } else {
+    replaceRowLCD(3, String("Cannot get ") + symbol);
+    return 0;
+  }
+
   return 1; // success
 }
 
@@ -83,10 +98,16 @@ int connectToAPI() {
   return 0; // fail
 }
 
-int updateStockMarketData() {
+int updateStockMarketData(double* averageChange) {
+  double totalChanges = 0.0;
   for (int i=0; i<stockCount; i++) {
+    struct stock* currentStock = &myStocks[i];
     if (! connectToAPI()) return 0;
-    if (! getDataForSymbol(myStocks[i])) return 0;
+    if (! getDataForSymbol(currentStock)) return 0;
+    totalChanges += (100.0f * (currentStock->currentPrice - currentStock->bookCost)) / currentStock->bookCost;
   }
+
+  *averageChange = totalChanges / stockCount;
+
   return 1; // success
 }

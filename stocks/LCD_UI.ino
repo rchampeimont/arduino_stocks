@@ -22,12 +22,6 @@ void initLCD() {
   lcd.clear();
 }
 
-void printStatusMessageOnLCD(String s) {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print(s);
-}
-
 void clearRowLCD(int row) {
   lcd.setCursor(0, row);
   for (int i=0; i<LCD_COLS; i++) {
@@ -35,9 +29,16 @@ void clearRowLCD(int row) {
   }
 }
 
+void replaceRowLCD(int row, String s) {
+  clearRowLCD(row);
+  lcd.setCursor(0, row);
+  lcd.print(s);
+}
+
+void printStatusMessageOnLCD(String s) {
+  replaceRowLCD(0, s);
+}
+
 void announceRetryLCD(int seconds) {
-  const int rowIndex = LCD_ROWS - 1;
-  clearRowLCD(rowIndex);
-  lcd.setCursor(0, rowIndex);
-  lcd.print(String("Will retry in ") + seconds + String(" s"));
+  replaceRowLCD(LCD_ROWS - 1, String("Will retry in ") + seconds + String(" s"));
 }

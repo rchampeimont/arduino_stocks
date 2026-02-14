@@ -2,8 +2,8 @@
 
 #include <math.h>
 
-// Reload data every 24 hours (unit is ms)
-#define UPDATE_PERIOD 86400000
+// Reload data every 12 hours (unit is ms)
+#define UPDATE_PERIOD 43200000
 
 // If cycle fails, retry after this number of seconds
 #define CYCLE_RETRY_DELAY 600
@@ -17,12 +17,15 @@ void setup() {
 }
 
 int runOneCycle() {
+  double averageChange;
+
   initLCD();
   if (! initWifi()) return 0;
 
-  float value = random(-100, 100) / 10.0;
-  if (!updateStockMarketData()) return 0;
-  printNumberOnMatrix(value);
+  if (! updateStockMarketData(&averageChange)) return 0;
+  Serial.println(String("Average change: ") + averageChange);
+  
+  printNumberOnMatrix(averageChange);
 
   return 1;
 }
