@@ -1,4 +1,5 @@
 #include <WiFiSSLClient.h>
+#include "global_vars.h"
 
 #define API_RETRIES 30
 
@@ -6,7 +7,24 @@ WiFiSSLClient client;
 
 const char* host = "www.alphavantage.co";
 
+int connectToAPI() {
+  for (int i=0; i<API_RETRIES; i++) {
+    printStatusMessageOnLCD("Conn to API...");
+    if (client.connect(host, 443)) {
+      printStatusMessageOnLCD("Connected to API");
+      return 1; // success
+    } else {
+      printStatusMessageOnLCD("Will retry API");
+      delay(1000);
+    }
+  }
+  printStatusMessageOnLCD("API fail gave up");
+  return 0; // fail
+}
+
 int getDataForSymbol(struct stock* currentStock) {
+  if (! connectToAPI()) return 0;
+
   const char* symbol = currentStock->symbol;
   String line;
 
@@ -70,9 +88,10 @@ int getDataForSymbol(struct stock* currentStock) {
     replaceRowLCD(1, String(symbol) + " " + price);
     replaceRowLCD(2, String("Book cost: ") + currentStock->bookCost);
 
+    currentStock->gain = (100.0f * (currentStock->currentPrice - currentStock->bookCost)) / currentStock->bookCost;
     const char prefix[] = "Gain: ";
     char pct[LCD_COLS - sizeof(prefix) + 1];
-    snprintf(pct, sizeof(pct), "%+.1f %%", (100.0f * (currentStock->currentPrice - currentStock->bookCost)) / currentStock->bookCost);
+    snprintf(pct, sizeof(pct), "%+.1f %%", currentStock->gain);
 
     replaceRowLCD(3, String(prefix) + pct);
   } else {
@@ -83,28 +102,20 @@ int getDataForSymbol(struct stock* currentStock) {
   return 1; // success
 }
 
-int connectToAPI() {
-  for (int i=0; i<API_RETRIES; i++) {
-    printStatusMessageOnLCD("Conn to API...");
-    if (client.connect(host, 443)) {
-      printStatusMessageOnLCD("Connected to API");
-      return 1; // success
-    } else {
-      printStatusMessageOnLCD("Will retry API");
-      delay(1000);
-    }
-  }
-  printStatusMessageOnLCD("API fail gave up");
-  return 0; // fail
+bool compareByGain(const stock& a, const stock& b) {
+    return a.gain > b.gain;
 }
 
 int updateStockMarketData(double* averageChange) {
   double totalChanges = 0.0;
+  
+  if (! getDataForSymbol(&compIndex)) return 0;
+
   for (int i=0; i<stockCount; i++) {
     struct stock* currentStock = &myStocks[i];
-    if (! connectToAPI()) return 0;
+
     if (! getDataForSymbol(currentStock)) return 0;
-    totalChanges += (100.0f * (currentStock->currentPrice - currentStock->bookCost)) / currentStock->bookCost;
+    totalChanges += currentStock->gain;
   }
 
   *averageChange = totalChanges / stockCount;

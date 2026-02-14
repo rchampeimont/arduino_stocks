@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <WiFiS3.h>
 #include "secrets.h"
+#include "global_vars.h"
 
 int initWifi() {
   // check for the WiFi module:

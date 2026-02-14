@@ -1,6 +1,7 @@
 // Code designed for Arduino Uno R4 Wifi
 
 #include <math.h>
+#include "global_vars.h"
 
 // Reload data every 12 hours (unit is ms)
 #define UPDATE_PERIOD 43200000
@@ -25,9 +26,16 @@ int runOneCycle() {
   if (! updateStockMarketData(&averageChange)) return 0;
   Serial.println(String("Average change: ") + averageChange);
   
+  // Print average gain on LED matrix on Arduino itself
   printNumberOnMatrix(averageChange);
 
+  printStockStats(averageChange);
+
   return 1;
+}
+
+void announceRetryLCD(int seconds) {
+  replaceRowLCD(LCD_ROWS - 1, String("Will retry in ") + seconds + String(" s"));
 }
 
 void loop() {

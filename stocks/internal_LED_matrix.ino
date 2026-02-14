@@ -1,4 +1,5 @@
 #include "Arduino_LED_Matrix.h"
+#include "global_vars.h"
 
 ArduinoLEDMatrix matrix;
 
