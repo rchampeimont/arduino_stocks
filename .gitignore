@@ -1,2 +1,5 @@
 # file containing secrets (API key, Wifi password)
 secrets.h
+
+# not sure I can upload the LCD datasheet for copyright reasons
+NHD-0420DZ-FSW-FBW.pdf
