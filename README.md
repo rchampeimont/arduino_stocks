@@ -1,5 +1,5 @@
-# arduino_stocks
-Stock portfolui monitoring on Arduino Uno R4 Wifi and LCD display
+# Arduino Stocks
+Stock portfolio monitoring on Arduino Uno R4 Wifi with an LCD display
 
 Parts:
 * Arduino Uno R4 Wifi
