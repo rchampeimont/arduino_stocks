@@ -3,8 +3,8 @@
 #include <math.h>
 #include "global_vars.h"
 
-// Reload data every 12 hours (unit is ms)
-#define UPDATE_PERIOD 43200000
+// Reload data every 24 hours (unit is ms)
+#define UPDATE_PERIOD 86400000
 
 // If cycle fails, retry after this number of seconds
 #define CYCLE_RETRY_DELAY 600
