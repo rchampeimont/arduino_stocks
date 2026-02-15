@@ -54,7 +54,7 @@ You can also adjust which ETF is used for comparison (as an approximation of S&P
 and you need to provide the price of this ETF so we can compare to its value now. It makes sense to provide
 its price roughly at the moment when you bought your stocks.
 
-Note that the list of stocks I provide only contain 3 stocks, it's obviously a bad idea to diversity that little
+Note that the list of stocks I provide only contain 3 stocks, it's obviously a bad idea to diversify that little
 but I did not provide my actual complete list to avoid disclosing my own portfolio.
 
 ## Schematic
