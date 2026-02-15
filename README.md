@@ -20,6 +20,21 @@ Limitation: I assume that you bought for the same amount of each stock,
 but if you have a different strategy it should be easy to adapt the code
 to take into account weights.
 
+## Pictures
+General overview:
+
+![General overview](images/overview.jpg)
+
+Data loading phase:
+
+![Data loading phase](images/loading_phase.jpg)
+
+Cycling through stocks once the data has been loaded:
+
+![Display phase - example 1](images/display_phase_COST.jpg)
+
+![Display phase - example 2](images/display_phase_RMS.jpg)
+
 ## To make it work for you
 You need to create a file called secrets.h in which you set:
 ```C
