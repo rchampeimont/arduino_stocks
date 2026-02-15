@@ -22,7 +22,7 @@ to take into account weights.
 
 ## To make it work for you
 You need to create a file called secrets.h in which you set:
-```
+```C
 // The Wifi network name (SSID) to connect to
 #define WIFI_NAME "your Wifi name"
 
