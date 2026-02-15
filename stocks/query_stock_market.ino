@@ -85,15 +85,9 @@ int getDataForSymbol(struct stock* currentStock) {
 
   if (price != 0) {
     currentStock->currentPrice = price;
-    replaceRowLCD(1, String(symbol) + " " + price);
-    replaceRowLCD(2, String("Book cost: ") + currentStock->bookCost);
-
     currentStock->gain = (100.0f * (currentStock->currentPrice - currentStock->bookCost)) / currentStock->bookCost;
-    const char prefix[] = "Gain: ";
-    char pct[LCD_COLS - sizeof(prefix) + 1];
-    snprintf(pct, sizeof(pct), "%+.1f %%", currentStock->gain);
-
-    replaceRowLCD(3, String(prefix) + pct);
+    
+    displayStockInfo(currentStock);
   } else {
     replaceRowLCD(3, String("Cannot get ") + symbol);
     return 0;

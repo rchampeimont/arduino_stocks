@@ -17,4 +17,6 @@ extern size_t stockCount;
 
 void printStockStats(double averageChange);
 
+void cycleThroughStocks(unsigned long delaySeconds, unsigned long totalTimeSeconds);
+
 #endif

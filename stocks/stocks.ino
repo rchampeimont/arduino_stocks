@@ -3,8 +3,10 @@
 #include <math.h>
 #include "global_vars.h"
 
-// Reload data every 24 hours (unit is ms)
-#define UPDATE_PERIOD 86400000
+// Reload data every 24 hours (unit is seconds)
+#define UPDATE_PERIOD 86400
+
+#define SHOW_EACH_STOCK_SECONDS 10
 
 // If cycle fails, retry after this number of seconds
 #define CYCLE_RETRY_DELAY 600
@@ -45,7 +47,7 @@ void loop() {
   stopWifi();
 
   if (success) {
-    delay(UPDATE_PERIOD);
+    cycleThroughStocks(SHOW_EACH_STOCK_SECONDS, UPDATE_PERIOD);
   } else {
     digitalWrite(LED_BUILTIN, HIGH);
     for (int i=CYCLE_RETRY_DELAY; i>0; i--) {
