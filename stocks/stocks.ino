@@ -6,7 +6,7 @@
 // Reload data every 24 hours (unit is seconds)
 #define UPDATE_PERIOD 86400
 
-#define SHOW_EACH_STOCK_SECONDS 10
+#define SHOW_EACH_STOCK_SECONDS 5
 
 // If cycle fails, retry after this number of seconds
 #define CYCLE_RETRY_DELAY 300
