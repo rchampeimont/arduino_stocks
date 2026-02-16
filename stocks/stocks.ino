@@ -9,7 +9,7 @@
 #define SHOW_EACH_STOCK_SECONDS 10
 
 // If cycle fails, retry after this number of seconds
-#define CYCLE_RETRY_DELAY 600
+#define CYCLE_RETRY_DELAY 300
 
 void setup() {
   Serial.begin(9600); // for debug
