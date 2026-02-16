@@ -89,7 +89,7 @@ int getDataForSymbol(struct stock* currentStock) {
     
     displayStockInfo(currentStock);
   } else {
-    replaceRowLCD(3, String("Cannot get ") + symbol);
+    printStatusMessageOnLCD(String("Cannot get ") + symbol);
     return 0;
   }
 
