@@ -23,7 +23,7 @@ to take into account weights.
 ## Pictures
 General overview:
 
-![General overview](images/overview.jpg)
+![General overview](images/overview2.jpg)
 
 Data loading phase:
 
