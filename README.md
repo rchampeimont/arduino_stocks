@@ -9,7 +9,7 @@ Parts:
 * 🌐 Connects to WiFi
 * 📡 Queries stock prices from a market API (Alpha Vantage)
 * 📊 Tracks personal portfolio with book cost vs. current price
-* 📈 Computes absolute gain per stock
+* 📈 Computes relative gain per stock
 * 🔄 Sorts stocks by gain
 * 🖥 Displays portfolio stats on:
   * External LCD display
