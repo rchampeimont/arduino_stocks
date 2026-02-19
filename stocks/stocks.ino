@@ -3,8 +3,8 @@
 #include <math.h>
 #include "global_vars.h"
 
-// Reload data every 24 hours (unit is seconds)
-#define UPDATE_PERIOD 86400
+// Data reload period (in seconds)
+#define UPDATE_PERIOD 3600
 
 #define SHOW_EACH_STOCK_SECONDS 5
 
@@ -42,11 +42,13 @@ void announceRetryLCD(int seconds) {
 
 void loop() {
   int success = runOneCycle();
+  Serial.println("Cycle result: " + String(success));
 
   // Stop Wifi chip which has burts of power causing LCD to flicker.
   stopWifi();
 
   if (success) {
+    digitalWrite(LED_BUILTIN, LOW);
     cycleThroughStocks(SHOW_EACH_STOCK_SECONDS, UPDATE_PERIOD);
   } else {
     digitalWrite(LED_BUILTIN, HIGH);
