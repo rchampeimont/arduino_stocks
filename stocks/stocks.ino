@@ -4,7 +4,7 @@
 #include "global_vars.h"
 
 // Data reload period (in seconds)
-#define UPDATE_PERIOD 3600
+#define UPDATE_PERIOD 14400
 
 #define SHOW_EACH_STOCK_SECONDS 5
 
