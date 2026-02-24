@@ -26,7 +26,7 @@ int getDataForSymbol(struct stock* currentStock) {
   if (! connectToAPI()) return 0;
 
   const char* symbol = currentStock->symbol;
-  String line;
+  String line = "", lastLine = "";
 
   printStatusMessageOnLCD(String("Getting ") + symbol);
   Serial.println(String("Getting ") + symbol);
@@ -37,44 +37,27 @@ int getDataForSymbol(struct stock* currentStock) {
                   "Host: " + host + "\r\n" +
                   "Connection: close\r\n\r\n";
 
-  //Serial.println(request); // for debug
+  Serial.println(request); // for debug
   client.print(request); // Send HTTP request
 
-  // Skip HTTP headers
-  while (client.connected()) {
-    line = client.readStringUntil('\n');
-    //Serial.println(line);
-    if (line == "\r") break;
-  }
-
-  int lineIndex = 0;
-  while (client.connected()) {
-    line = client.readStringUntil(lineIndex == 1 ? '%' : '\n');
-    //Serial.println(line);
-    lineIndex++;
-    if (lineIndex == 2) break;
-  }
-
-  if (line.indexOf("rate limit") != -1) {
-    printStatusMessageOnLCD("API rate limit error");
-    return 0; // fail
-  }
-
-  // Gather last line
-  if (lineIndex < 2) {
-    line = "";
-    while (client.connected() || client.available()) {
-      if (client.available()) {
-        char c = client.read();
+  while (client.connected() || client.available()) {
+    if (client.available()) {
+      char c = client.read();
+      if (c == '\n') {
+        Serial.println(String("LINE: ") + line);
+        lastLine = line;
+        line = "";
+      } else if (c == '\r') {
+        // ignore CR
+      } else {
         line += c;
       }
     }
   }
-
-  Serial.println(String("Will parse line: ") + line);
+  Serial.println(String("LAST LINE: ") + lastLine);
 
   // Point pointer to first char of the price value
-  const char* p = line.c_str();
+  const char* p = lastLine.c_str();
   int commaCount = 0;
   while (*p && commaCount < 4) {
     if (*p == ',') commaCount++;
