@@ -29,7 +29,7 @@ int getDataForSymbol(struct stock* currentStock) {
   String line = "", lastLine = "";
 
   printStatusMessageOnLCD(String("Getting ") + symbol);
-  Serial.println(String("Getting ") + symbol);
+  //Serial.println(String("Getting ") + symbol);
 
   String path = String("/query?function=GLOBAL_QUOTE&symbol=") + symbol + "&apikey=" + ALPHAVANTAGE_API_KEY + "&datatype=csv";
 
@@ -37,7 +37,7 @@ int getDataForSymbol(struct stock* currentStock) {
                   "Host: " + host + "\r\n" +
                   "Connection: close\r\n\r\n";
 
-  Serial.println(request); // for debug
+  //Serial.println(request); // for debug
   client.print(request); // Send HTTP request
 
   while (client.connected() || client.available()) {
@@ -54,7 +54,7 @@ int getDataForSymbol(struct stock* currentStock) {
       }
     }
   }
-  Serial.println(String("LAST LINE: ") + lastLine);
+  //Serial.println(String("LAST LINE: ") + lastLine);
 
   // Point pointer to first char of the price value
   const char* p = lastLine.c_str();
