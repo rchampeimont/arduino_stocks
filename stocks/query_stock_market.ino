@@ -44,7 +44,7 @@ int getDataForSymbol(struct stock* currentStock) {
     if (client.available()) {
       char c = client.read();
       if (c == '\n') {
-        Serial.println(String("LINE: ") + line);
+        //Serial.println(String("LINE: ") + line);
         lastLine = line;
         line = "";
       } else if (c == '\r') {
