@@ -20,7 +20,9 @@ Limitation: I assume that you bought for the same amount of each stock,
 but if you have a different strategy it should be easy to adapt the code
 to take into account weights.
 
-## Pictures
+## Pictures and Video
+Video: https://www.youtube.com/shorts/5xUDOKI4ry4
+
 General overview:
 
 ![General overview](images/overview2.jpg)
