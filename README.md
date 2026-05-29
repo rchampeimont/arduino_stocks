@@ -21,7 +21,7 @@ but if you have a different strategy it should be easy to adapt the code
 to take into account weights.
 
 ## Pictures and Video
-Video: https://www.youtube.com/shorts/5xUDOKI4ry4
+Video: https://www.youtube.com/shorts/Sd4D_UB64IQ
 
 General overview:
 
