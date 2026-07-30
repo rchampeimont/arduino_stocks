@@ -1,7 +1,7 @@
 #include "global_vars.h"
 
-// Index for comparison with portfolio
-struct stock compIndex = { "IVV", 695.32 }; // S&P 500 ETF
+// Index for comparison with portfolio (weight is ignored here)
+struct stock compIndex = { 1.0, "IVV", 695.32 }; // S&P 500 ETF
 
 struct stock myStocks[] = {
   { 1.0, "RMS.PAR", 2150.0 }, // – Hermes (France)
