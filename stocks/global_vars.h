@@ -5,6 +5,7 @@
 #define LCD_COLS 20
 
 struct stock {
+  double weight;
   const char* symbol;
   double bookCost;
   double currentPrice;

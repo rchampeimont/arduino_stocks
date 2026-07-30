@@ -85,6 +85,7 @@ bool compareByGain(const stock& a, const stock& b) {
 
 int updateStockMarketData(double* averageChange) {
   double totalChanges = 0.0;
+  double totalWeight = 0.0;
   
   if (! getDataForSymbol(&compIndex)) return 0;
 
@@ -92,10 +93,11 @@ int updateStockMarketData(double* averageChange) {
     struct stock* currentStock = &myStocks[i];
 
     if (! getDataForSymbol(currentStock)) return 0;
-    totalChanges += currentStock->gain;
+    totalChanges += currentStock->weight * currentStock->gain;
+    totalWeight += currentStock->weight;
   }
 
-  *averageChange = totalChanges / stockCount;
+  *averageChange = totalChanges / totalWeight;
 
   return 1; // success
 }
