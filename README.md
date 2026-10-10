@@ -6,19 +6,11 @@ Parts:
 * LCD display: NHD-0420DZ-FSW-FBW - https://newhavendisplay.com/fr/content/specs/NHD-0420DZ-FSW-FBW.pdf
 
 ## Features
-* 🌐 Connects to WiFi
-* 📡 Queries stock prices from a market API (Alpha Vantage)
-* 📊 Tracks personal portfolio with book cost vs. current price
-* 📈 Computes relative gain per stock
-* 🔄 Sorts stocks by gain
-* 🖥 Displays portfolio stats on:
-  * External LCD display
-  * Internal UNO R4 LED matrix
-* 🧩 Modular architecture across multiple .ino files
-
-Limitation: I assume that you bought for the same amount of each stock,
-but if you have a different strategy it should be easy to adapt the code
-to take into account weights.
+* Show a portfolio global gain percentage on the LCD screen and on the LED matrix
+* Shows comparison with a chosen index (eg. S&P 500)
+* Cycles through each stock every few seconds from the highest to lowest gain (showing the stock code, book cost, current value, and gain %)
+* Updates every day from market data with API
+* No written with AI
 
 ## Pictures and Video
 Video: https://www.youtube.com/shorts/Sd4D_UB64IQ
