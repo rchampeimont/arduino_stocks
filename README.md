@@ -9,8 +9,8 @@ Parts:
 * Show a portfolio global gain percentage on the LCD screen and on the LED matrix
 * Shows comparison with a chosen index (eg. S&P 500)
 * Cycles through each stock every few seconds from the highest to lowest gain showing the stock code, book cost, current value, and gain %
-* Updates every day from market data with API
-* Supports weights for stocks (to account for a different level of investment in them to calculate global gain percentage)
+* Updates every day from market data (using the Alphavantage API)
+* Supports weights for stocks (to account for a different level of investment in each one of them to calculate the global gain percentage)
 * Not written with AI
 
 ## Pictures and Video
