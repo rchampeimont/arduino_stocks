@@ -8,9 +8,10 @@ Parts:
 ## Features
 * Show a portfolio global gain percentage on the LCD screen and on the LED matrix
 * Shows comparison with a chosen index (eg. S&P 500)
-* Cycles through each stock every few seconds from the highest to lowest gain (showing the stock code, book cost, current value, and gain %)
+* Cycles through each stock every few seconds from the highest to lowest gain showing the stock code, book cost, current value, and gain %
 * Updates every day from market data with API
-* No written with AI
+* Supports weights for stocks (to account for a different level of investment in them to calculate global gain percentage)
+* Not written with AI
 
 ## Pictures and Video
 Video: https://www.youtube.com/shorts/Sd4D_UB64IQ
